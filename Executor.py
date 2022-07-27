@@ -3,6 +3,7 @@ import glob
 import time
 import torch
 import os
+import copy
 
 from Gen import Gen
 from Cityscapes import CitySegmentation
@@ -101,7 +102,7 @@ class Executor:
             step_size=1,
             clip_size=0.02,
             reset_period=number_of_steps,
-            batch_size=batch_size
+            batch_size=1
         )
 
     def start(self):
@@ -144,7 +145,7 @@ class Executor:
                                 batch = next(train_iter)
                                 train_id += 1
 
-                                Gen(
+                                gen = Gen(
                                     model,
                                     batch,
                                     train_id,
@@ -152,7 +153,17 @@ class Executor:
                                     self.device,
                                     self.number_of_steps,
                                     self.data_queue
+                                )
+
+                                torch.multiprocessing.spawn(
+                                    target,
+                                    args=(),
+                                    nprocs=1,
+                                    join=True,
+                                    daemon=False,
+                                    start_method='spawn'
                                 ).start()
+                                
                             except StopIteration:
                                 train_iter = iter(self.train_data_set_loader)
                     else:

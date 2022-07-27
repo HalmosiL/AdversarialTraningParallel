@@ -53,10 +53,10 @@ class Cosine_PDG_Adam:
         prediction = prediction.reshape(self.batch_size, -1)
         target = target.reshape(self.batch_size, -1)
 
-        loss = (1 - self.loss_function(prediction, target + 0.0001)).sum()
-        loss.backward(retain_graph=True)
-        
-        image = self.optimizer.step(-1 * image.grad, image)
+        loss = (1 - self.loss_function(prediction, target + 0.0001))
+        grad = torch.autograd.grad(loss, image, retain_graph=False, create_graph=False)[0]
+
+        image = self.optimizer.step(-1 * grad, image)
             
         image = torch.max(torch.min(image, image_o + self.clip_size), image_o - self.clip_size)
         image = image.clamp(0,1)
@@ -70,13 +70,12 @@ class Cosine_PDG_Adam:
         return image
 
 def model_immer_attack_auto_loss(image, model, attack, number_of_steps, device):
-    image_adv = Variable(image.data, requires_grad=True).to(device)
+    image_adv = image.clone().detach().to(device)
+    image_adv.requires_grad = True
     target = model(image)[-1]
 
     for i in range(number_of_steps):
-        model.zero_grad()
         prediction = model(image_adv)[-1]
         image_adv = attack.step(image, image_adv, prediction, target)
-        image_adv = Variable(image_adv.data, requires_grad=True).to(device)
 
     return image_adv
