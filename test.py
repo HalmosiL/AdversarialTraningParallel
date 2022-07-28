@@ -38,7 +38,7 @@ def start(device):
 
     train_data_set_loader = torch.utils.data.DataLoader(
         train_data_set,
-        batch_size=16,
+        batch_size=4,
         num_workers=0
     )
 
@@ -51,15 +51,13 @@ def start(device):
 
     attack = Cosine_PDG_Adam(
         step_size=1,
-        clip_size=0.02,
-        reset_period=2,
-        batch_size=1
+        clip_size=0.02
     )
     
     run(0, batch, device, model, attack, 2, "./")
 
 if __name__ == '__main__':
-    GPU_MAX_memory_in_used = 4
+    GPU_MAX_memory_in_used = 4000
 
     def get_freer_gpu(gpu_id=None):
         os.system('nvidia-smi -q -d Memory |grep -A4 GPU|grep Used >xtmp')

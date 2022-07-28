@@ -38,20 +38,18 @@ class Adam_optimizer:
         return image
 
 class Cosine_PDG_Adam:
-    def __init__(self, step_size, clip_size, reset_period, batch_size):
+    def __init__(self, step_size, clip_size):
         self.step_size = step_size
         self.clip_size = clip_size
         self.step_size = step_size
-        self.batch_size = batch_size
 
         self.optimizer = Adam_optimizer(lr=step_size, B1=0.9, B2=0.99)
         self.loss_function = torch.nn.CosineSimilarity(dim=1, eps=1e-6)
-        self.reset_period = reset_period
         self.step_ = 0
 
     def step(self, image_o, image, prediction, target):
-        prediction = prediction.reshape(self.batch_size, -1)
-        target = target.reshape(self.batch_size, -1)
+        prediction = prediction.reshape(1, -1)
+        target = target.reshape(1, -1)
 
         loss = (1 - self.loss_function(prediction, target + 0.0001))
         grad = torch.autograd.grad(loss, image, retain_graph=False, create_graph=False)[0]
@@ -61,13 +59,11 @@ class Cosine_PDG_Adam:
         image = torch.max(torch.min(image, image_o + self.clip_size), image_o - self.clip_size)
         image = image.clamp(0,1)
 
-        self.step_ += 1
-
-        if(self.step == self.reset_period):
-            self.step_ = 0
-            self.optimizer = Adam_optimizer(lr=self.step_size, B1=0.9, B2=0.99)
-
         return image
+    
+    def reset(self):
+        self.optimizer = Adam_optimizer(lr=self.step_size, B1=0.9, B2=0.99)
+        
 
 def model_immer_attack_auto_loss(image, model, attack, number_of_steps, device):
     image_adv = image.clone().detach().to(device)
@@ -77,5 +73,7 @@ def model_immer_attack_auto_loss(image, model, attack, number_of_steps, device):
     for i in range(number_of_steps):
         prediction = model(image_adv)[-1]
         image_adv = attack.step(image, image_adv, prediction, target)
+    
+    attack.reset()
 
     return image_adv

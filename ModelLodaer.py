@@ -16,3 +16,10 @@ def get_resnet18_hourglass(device, encoder_weights=None):
     model = model.to(device).eval()
 
     return model
+
+def load_model(path, device):
+    model = get_resnet18_hourglass(device, encoder_weights=None)
+    model.load_state_dict(torch.load(path))
+    model = model.to(device)
+
+    return model

@@ -17,8 +17,8 @@ class CitySegmentation(SegmentationDataset):
         self.images, self.mask_paths = _get_city_pairs(self.root, self.split)
         self.start_index = start_index
         self.end_index = end_index
-        if(end_index is None):
-            end_index = len(self.images)
+        if(self.end_index is None):
+            self.end_index = len(self.images)
         assert (len(self.images) == len(self.mask_paths))
         if len(self.images) == 0:
             raise RuntimeError("Found 0 images in subfolders of:" + root + "\n")
