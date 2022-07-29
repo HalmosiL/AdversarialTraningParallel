@@ -44,7 +44,6 @@ class Executor:
         self.queue_size_val = queue_size_val
         self.data_path = data_path
         self.model_name = None
-        self.number_of_gens = 0
         self.batch_size = batch_size
         self.device = device
         self.num_workers = 4
