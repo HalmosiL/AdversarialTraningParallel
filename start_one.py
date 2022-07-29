@@ -15,7 +15,7 @@ def start(CONFIG, CONFIG_NAME):
 
         if(gpu_id):
             print("Try to use GPU device:" + CONFIG['DEVICE'] + "...")
-            if(CONFIG['GPU_MAX_MEMORY_IN_USED'] >= memory_used[int(gpu_id)]):
+            if(int(gpu_id) >= memory_used[int(gpu_id)]):
                 print("GPU device:" + CONFIG['DEVICE'] + " is ready to use...")
                 free_gpu.append(int(gpu_id))
             else:
