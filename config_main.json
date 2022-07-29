@@ -1,6 +1,6 @@
 {
-    "GPU_MAX_MEMORY_IN_USED": [50, 1400],
-    "DEVICE": ["cuda:2", "cuda:2"],
+    "GPU_MAX_MEMORY_IN_USED": [50, 1400, 1400, 1400],
+    "DEVICE": ["cuda:2", "cuda:2", "cuda:2", "cuda:2"],
     "MODEL_CACHE":"./model_cache/",
     "QUEUE_SIZE_TRAIN":5,
     "QUEUE_SIZE_VAL":5,
@@ -8,7 +8,7 @@
     "DATA_PATH":"../../city-scapes-dataset/",
     "BATCH_SIZE":8,
     "NUMBER_OF_STEPS":3,
-    "NUMBER_OF_EXECUTORS":2,
+    "NUMBER_OF_EXECUTORS":3,
     "MODE":"train",
     "LOG_PATH": "./Logs/"
 }
