@@ -138,8 +138,6 @@ class Executor:
                     model = resnet_slice_model(
                         load_model(new_model_name, self.device)
                     )
-                    
-                print(self.device)
 
                 if(self.train_element_id < self.train_data_set_len):
                     number_elments_of_data_queue = len(glob.glob(self.data_queue + "/*"))
