@@ -138,6 +138,8 @@ class Executor:
                     model = resnet_slice_model(
                         load_model(new_model_name, self.device)
                     )
+                    
+                print(self.device)
 
                 if(self.train_element_id < self.train_data_set_len):
                     number_elments_of_data_queue = len(glob.glob(self.data_queue + "/*"))
@@ -165,7 +167,7 @@ class Executor:
                             train_iter = iter(self.train_data_set_loader)
                     else:
                         print("Data queue(Train) is full process is waiting...")
-                        time.sleep(0.5)
+                        time.sleep(1)
 
                     self.val_element_id = 0
                 else:
@@ -196,7 +198,7 @@ class Executor:
                                     val_iter = iter(self.val_data_set_loader)
                             else:
                                 print("Data queue(Val) is full process is waiting...")
-                                time.sleep(0.5)
+                                time.sleep(1)
                         else:
                             self.train_element_id = 0
                     else:
