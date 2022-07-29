@@ -40,6 +40,12 @@ def start(CONFIG, CONFIG_NAME):
         time.sleep(10)
         free_gpu = get_freer_gpu(CONFIG['DEVICE'].split(":")[-1])
         
+    if(free_gpu[0] == 2):
+        free_gpu[0] = 3
+    else:
+        if(free_gpu[0] == 3):
+            free_gpu[0] = 2
+        
     DEVICE = 'cuda:' + str(free_gpu[0])
     print("Use GPU device:" + DEVICE)
 
