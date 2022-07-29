@@ -137,36 +137,40 @@ class Executor:
                     model = resnet_slice_model(
                         load_model(new_model_name, self.device)
                     )
+                    
+                if(config_main["MODE"] == "train"):
+                    if(self.train_element_id < self.train_data_set_len):
+                        number_elments_of_data_queue = len(glob.glob(self.data_queue + "/*"))
 
-                if(self.train_element_id < self.train_data_set_len):
-                    number_elments_of_data_queue = len(glob.glob(self.data_queue + "/*"))
+                        if(number_elments_of_data_queue < self.queue_size_train * 2):
+                            if(self.train_element_id == 0):
+                                print("Start generating traning data from:", self.data_set_start_index_train, " to:", self.data_set_end_index_train, "...")
 
-                    if(number_elments_of_data_queue < self.queue_size_train * 2):
-                        if(self.train_element_id == 0):
-                            print("Start generating traning data from:", self.data_set_start_index_train, " to:", self.data_set_end_index_train, "...")
+                            try:
+                                train_id += 1
+                                self.train_element_id += 1
 
-                        try:
-                            train_id += 1
-                            self.train_element_id += 1
+                                batch = next(train_iter)
 
-                            batch = next(train_iter)
+                                run(
+                                    id_=train_id,
+                                    batch=batch,
+                                    device=self.device,
+                                    model=model,
+                                    attack=self.attack,
+                                    number_of_steps=self.number_of_steps,
+                                    data_queue=self.data_queue
+                                )
+                            except StopIteration:
+                                train_iter = iter(self.train_data_set_loader)
+                        else:
+                            print("Data queue(Train) is full process is waiting...")
+                            time.sleep(1)
 
-                            run(
-                                id_=train_id,
-                                batch=batch,
-                                device=self.device,
-                                model=model,
-                                attack=self.attack,
-                                number_of_steps=self.number_of_steps,
-                                data_queue=self.data_queue
-                            )
-                        except StopIteration:
-                            train_iter = iter(self.train_data_set_loader)
+                        self.val_element_id = 0
                     else:
-                        print("Data queue(Train) is full process is waiting...")
+                        print("Waiting(Train) for other executors to finish...")
                         time.sleep(1)
-
-                    self.val_element_id = 0
                 else:
                     if(config_main["MODE"] == "val"):
                         if(self.val_element_id < self.val_data_set_len):
@@ -199,7 +203,7 @@ class Executor:
                         else:
                             self.train_element_id = 0
                     else:
-                        print("Waiting for other executors to finish...")
+                        print("Waiting(VAL) for other executors to finish...")
                         time.sleep(1)
 
 
