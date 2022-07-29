@@ -35,13 +35,10 @@ def start(CONFIG, CONFIG_NAME):
         CONFIG = json.load(open(sys.argv[1]))
         
         if(not CONFIG['Allow_TO_RUN']):
-            break
+            return
         
         time.sleep(10)
         free_gpu = get_freer_gpu(CONFIG['DEVICE'].split(":")[-1])
-        
-    if(not CONFIG['Allow_TO_RUN']):
-        return
         
     DEVICE = 'cuda:' + str(free_gpu[0])
     print("Use GPU device:" + DEVICE)
