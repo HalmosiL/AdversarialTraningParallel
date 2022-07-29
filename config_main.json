@@ -7,8 +7,8 @@
     "DATA_QUEUE":"./data_queue/",
     "DATA_PATH":"../../city-scapes-dataset/",
     "BATCH_SIZE":32,
-    "NUMBER_OF_STEPS":3,
-    "NUMBER_OF_EXECUTORS":3,
+    "NUMBER_OF_STEPS":5,
+    "NUMBER_OF_EXECUTORS":1,
     "MODE":"train",
     "LOG_PATH": "./Logs/"
 }
