@@ -6,7 +6,7 @@
     "QUEUE_SIZE_VAL":5,
     "DATA_QUEUE":"./data_queue/",
     "DATA_PATH":"../../city-scapes-dataset/",
-    "BATCH_SIZE":32,
+    "BATCH_SIZE":16,
     "NUMBER_OF_STEPS":5,
     "NUMBER_OF_EXECUTORS":2,
     "MODE":"train",
