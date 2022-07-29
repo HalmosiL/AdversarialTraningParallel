@@ -1,6 +1,6 @@
 {
     "GPU_MAX_MEMORY_IN_USED": [3, 1400],
-    "DEVICE": ["cuda:2", "cuda:2"],
+    "DEVICE": ["cuda:1", "cuda:1"],
     "MODEL_CACHE":"./model_cache/",
     "QUEUE_SIZE_TRAIN":5,
     "QUEUE_SIZE_VAL":5,
